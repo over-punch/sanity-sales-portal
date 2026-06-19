@@ -8,7 +8,8 @@
    "scripts": {
       "build": "rollup -c",
       "dev": "rollup -c -w",
-      "prepare": "npm run build"
+      "prepare": "npm run build",
+      "capture": "mmdc -i scripts/architecture.mmd -o assets/architecture.svg -b transparent"
    },
    "keywords": [
       "sanity",
