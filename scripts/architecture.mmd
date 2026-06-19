@@ -1,0 +1,28 @@
+%% Data flow: how the Sales Portal tool gets, processes, and renders sales data.
+%% Reproducible source for assets/architecture.svg — regenerate via `npm run capture`.
+flowchart TD
+    subgraph studio["Sanity Studio (sanity.config.ts)"]
+        plugin["salesPortal()<br/>definePlugin → registers a Studio tool"]
+        tool["Sales Portal tool 📊<br/>SalesPortalComponent"]
+        plugin --> tool
+    end
+
+    subgraph api["Your sales API (you must provide)"]
+        endpoint["POST apiEndpoint/getSales<br/>default: /api/sales-portal/getSales"]
+    end
+
+    tool -->|"fetch date + filters"| endpoint
+    endpoint -->|"JSON: { sales: SaleData[] }"| tool
+
+    subgraph render["In-component processing (client-side)"]
+        process["Aggregate SaleData →<br/>revenue · typefaces · license types · locations"]
+        cards["SummaryCards"]
+        performers["Top Typefaces · License Types"]
+        process --> cards
+        process --> performers
+    end
+
+    tool --> process
+
+    note["Note: the fetch is a stub<br/>(see code comment 'replace with actual implementation')"]
+    tool -.-> note
