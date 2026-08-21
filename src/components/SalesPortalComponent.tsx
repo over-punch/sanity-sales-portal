@@ -14,7 +14,7 @@ import {
 	Spinner,
 	Badge,
 	Stack,
-} from '@sanity/ui';
+} from '@liiift-studio/sanity-ui-compat';
 import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import {
 	SaleData,
