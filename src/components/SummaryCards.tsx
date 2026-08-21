@@ -1,6 +1,6 @@
 // Summary cards component displaying key sales metrics using Sanity UI
 import React from 'react';
-import { Card, Grid, Heading, Text, Box, Flex, Badge, Stack } from '@sanity/ui';
+import { Card, Grid, Heading, Text, Box, Flex, Badge, Stack } from '@liiift-studio/sanity-ui-compat';
 import { SaleData, LocationData } from '../types';
 import { formatCurrency, formatPercentage, getTrendDirection, centsToDollars } from '../utils/formatters';
 
