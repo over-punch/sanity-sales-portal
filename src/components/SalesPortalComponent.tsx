@@ -284,25 +284,27 @@ export const SalesPortalComponent: React.FC<SalesPortalProps> = ({
 
 					{/* Date Controls */}
 					<Flex align="center" gap={2}>
-						<Button 
-							mode="ghost" 
-							icon={() => '←'} 
-							onClick={handlePreviousMonth}
-							disabled={loading}
-							tooltip="Previous month"
-						/>
-						
+						<Tooltip text="Previous month">
+							<Button
+								mode="ghost"
+								icon={() => '←'}
+								onClick={handlePreviousMonth}
+								disabled={loading}
+							/>
+						</Tooltip>
+
 						<Text size={1} weight="medium">
 							{format(currentDate, 'MMM yyyy')}
 						</Text>
-						
-						<Button 
-							mode="ghost" 
-							icon={() => '→'} 
-							onClick={handleNextMonth}
-							disabled={loading}
-							tooltip="Next month"
-						/>
+
+						<Tooltip text="Next month">
+							<Button
+								mode="ghost"
+								icon={() => '→'}
+								onClick={handleNextMonth}
+								disabled={loading}
+							/>
+						</Tooltip>
 					</Flex>
 				</Flex>
 
