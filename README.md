@@ -1,12 +1,18 @@
 # Sanity Sales Portal Plugin
 
-A sales dashboard and analytics tool for **Sanity Studio v3**, converted from the Darden Studio sales portal. It registers a **Sales Portal** tool in your Studio that aggregates order data into revenue totals, top-performing typefaces and license types, and geographic breakdowns — built entirely with [`@sanity/ui`](https://www.sanity.io/ui).
+A sales dashboard and analytics tool for **Sanity Studio v3 through v6**, converted from the Darden Studio sales portal. It registers a **Sales Portal** tool in your Studio that aggregates order data into revenue totals, top-performing typefaces and license types, and geographic breakdowns — built on [`@sanity/ui`](https://www.sanity.io/ui) primitives (via a compat layer — see [Studio compatibility](#studio-compatibility)).
 
-[![Sanity v3](https://img.shields.io/badge/Sanity-v3-f03e2f)](https://www.sanity.io/)
+[![Sanity Studio v3–v6](https://img.shields.io/badge/Sanity%20Studio-v3%20%C2%B7%20v4%20%C2%B7%20v5%20%C2%B7%20v6-f03e2f)](#studio-compatibility)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178c6)](https://www.typescriptlang.org/)
+[![status: internal](https://img.shields.io/badge/status-internal%20%C2%B7%20unpublished-lightgrey)](#installation)
+[![build: broken](https://img.shields.io/badge/build-broken-critical)](#known-issue-the-build-is-broken)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#license)
 
-> **Status — internal / pre-release.** This package is **not published to npm**; install it from source (see [Installation](#installation)). The data-fetching layer ships as a **stub** — you provide the sales API. See [Connecting your data](#connecting-your-data) before expecting the dashboard to show numbers.
+> **Status — internal / pre-release.** This package is **not published to npm**; the name `sanity-sales-portal` is unscoped and unclaimed on the registry, so `npm install sanity-sales-portal` returns a 404. Consume it by path or workspace (see [Installation](#installation)).
+>
+> Two things will stop you before the dashboard shows numbers:
+> 1. **The build does not currently run** — `npm run build` fails outright. See [Known issue: the build is broken](#known-issue-the-build-is-broken).
+> 2. The data-fetching layer ships as a **stub** — you provide the sales API. See [Connecting your data](#connecting-your-data).
 
 > _Maintainer note:_ a live screenshot/GIF of the rendered dashboard would strengthen this README. The dashboard requires a running Studio plus a sales API, so it can't be captured headlessly — please drop a capture into `assets/` and embed it under [Features](#features).
 
@@ -59,17 +65,59 @@ flowchart TD
 
 ## Installation
 
-This package is **not on npm**. Install it from the repository (it builds on `prepare`, so the `dist/` output is generated on install):
+This package is **internal and unpublished** — there is no registry entry, and the name is unscoped, so it is not hiding under `@liiift-studio/` either. Consume it from source.
+
+> [!IMPORTANT]
+> `package.json` declares `"prepare": "rollup -c"`, so npm will try to build on install — **and that build currently fails** ([details](#known-issue-the-build-is-broken)). Until it is fixed, installing this package will error at the prepare step and no `dist/` will be produced. Fix the Rollup config first, or consume `src/` directly through your Studio's own bundler.
+
+**1. Local path (most common).** From a Studio elsewhere on the same machine, point at the checkout — npm symlinks it, so edits are picked up immediately:
 
 ```bash
-# From a git URL
-npm install github:Liiift-Studio/sanity-sales-portal
-
-# …or, inside this monorepo, from a local path
-npm install ../tools/sanity-tools/sanity-sales-portal
+npm install file:../../tools/sanity-tools/sanity-sales-portal
 ```
 
-Peer dependencies you must already have in the consuming Studio: `sanity` ^3, `react` / `react-dom` ^18, `@sanity/ui` ^2, `styled-components` ^6.
+**2. npm workspace.** If the consuming Studio and this package share an npm workspace tree:
+
+```jsonc
+// package.json of the consuming Studio
+"dependencies": {
+  "sanity-sales-portal": "*"
+}
+```
+
+**3. Git URL.** Requires read access to the private repository:
+
+```bash
+npm install github:Liiift-Studio/sanity-sales-portal
+```
+
+The import specifier is `sanity-sales-portal` in every case, matching the `name` in `package.json`.
+
+Peer dependencies you must already have in the consuming Studio: `sanity` `>=3 <7`, `react` / `react-dom` `^18 || ^19`, `@sanity/ui` `>=2 <5`, `styled-components` `^6`. See [Studio compatibility](#studio-compatibility) for why those ranges are correct.
+
+### Known issue: the build is broken
+
+`npm run build` (and therefore the `prepare` hook) fails. **This predates the current documentation pass and is recorded here so it is not forgotten — it is not something this README introduced.**
+
+`rollup.config.js` mixes module systems: it uses an ESM `import` at the top *and* a CommonJS `require('typescript')` inside the plugin options, while `package.json` declares no `"type"` field. Node reparses the file as ESM because of the `import`, at which point `require` is not defined:
+
+```js
+import typescript from 'rollup-plugin-typescript2';   // ESM
+// …
+plugins: [
+	typescript({
+		typescript: require('typescript'),               // CJS — throws in ESM scope
+	}),
+],
+```
+
+```
+[!] RollupError: Node tried to load your configuration as an ES module even though it is
+    likely CommonJS…
+Original error: require is not defined in ES module scope, you can use import instead
+```
+
+It loads as neither format. The fix is small — import `typescript` at the top alongside the plugin, rename the config to `.cjs`, or pass `--bundleConfigAsCjs` — but **no fix is applied here**; this section only documents the current state. Everything else in this README describes the source as written.
 
 ## Usage
 
@@ -120,6 +168,32 @@ These props are accepted by `SalesPortalComponent`. The **Read today?** column r
 | `showTables`       | `boolean`                    | `true`                | ⏳          | Reserved                    |
 | `isAdmin`          | `boolean`                    | `false`               | ⏳          | Reserved (permissions)      |
 | `allowExport`      | `boolean`                    | `false`               | ⏳          | Reserved (CSV export)       |
+
+## Studio compatibility
+
+| Peer | Range | Notes |
+|---|---|---|
+| `sanity` | `>=3 <7` | Studio v3, v4, v5 and v6 |
+| `@sanity/ui` | `>=2 <5` | **Not a typo** — Studio v6 ships `@sanity/ui` **v4**, not v5 |
+| `react` / `react-dom` | `^18 \|\| ^19` | |
+| `styled-components` | `^6` | |
+
+One build spans four consecutive Studio majors, which is why the ranges look odd at a glance.
+
+`@sanity/ui` v4 moved `Tooltip`, `Menu`, `MenuButton`, `MenuItem`, `Code`, `Popover`, `Autocomplete`, `Toast` and `useToast` out of the package root into subpath entries, and `@sanity/icons` v5 removed every named `*Icon` export.
+
+The trap: **both packages still *declare* the removed names in their `.d.ts`, typed `never`.** A named import type-checks, compiles green, and only then fails at runtime as an undefined component. TypeScript cannot see it, so a green build proves nothing about whether the dashboard renders.
+
+This plugin therefore imports **no `@sanity/ui` or `@sanity/icons` symbol directly**. Every primitive routes through [`@liiift-studio/sanity-ui-compat`](https://www.npmjs.com/package/@liiift-studio/sanity-ui-compat), a direct dependency that resolves whichever namespace is actually installed at runtime:
+
+```ts
+// src/components/SummaryCards.tsx
+import { Card, Grid, Heading, Text, Box, Flex, Badge, Stack } from '@liiift-studio/sanity-ui-compat';
+```
+
+Since Studio v6 ships `@sanity/ui` v4, the `>=2 <5` upper bound is correct rather than a stale ceiling.
+
+> **Verification status.** v3–v6 support rests on the declared peer ranges alone. This package has **no test suite**, and — as noted above — **its build does not currently run**, so nothing here has been compiled or exercised against Sanity 6. Treat the ranges as intent, not proof.
 
 ## Data Structure
 
@@ -229,8 +303,8 @@ Also exported: `formatDate`, `formatDateAxis`, `dollarsToCents`, `getTrendDirect
 ### Prerequisites
 
 - Node.js 18+
-- Sanity Studio v3+
-- React 18+
+- Sanity Studio v3, v4, v5 or v6 (see [Studio compatibility](#studio-compatibility))
+- React 18 or 19
 
 ### Building from Source
 
@@ -240,6 +314,8 @@ cd sanity-sales-portal
 npm install
 npm run build
 ```
+
+> ⚠️ `npm run build` currently **fails** — and because `prepare` runs it, `npm install` fails too. See [Known issue: the build is broken](#known-issue-the-build-is-broken) for the cause and the one-line fixes.
 
 ### Development Mode
 
