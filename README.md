@@ -50,7 +50,7 @@ flowchart TD
 ```
 
 <!-- Static fallback (renders where Mermaid does not, e.g. some registries). Regenerate with `npm run capture`. -->
-![Sales Portal data flow: salesPortal() registers a Studio tool that POSTs to your sales API, then aggregates the returned SaleData into summary cards and top-performer panels.](https://raw.githubusercontent.com/Liiift-Studio/sanity-sales-portal/main/assets/architecture.svg?v=1)
+![Sales Portal data flow: salesPortal() registers a Studio tool that POSTs to your sales API, then aggregates the returned SaleData into summary cards and top-performer panels.](https://raw.githubusercontent.com/over-punch/sanity-sales-portal/main/assets/architecture.svg?v=1)
 
 ## Features
 
@@ -88,7 +88,7 @@ npm install file:../../tools/sanity-tools/sanity-sales-portal
 **3. Git URL.** Requires read access to the private repository:
 
 ```bash
-npm install github:Liiift-Studio/sanity-sales-portal
+npm install github:over-punch/sanity-sales-portal
 ```
 
 The import specifier is `sanity-sales-portal` in every case, matching the `name` in `package.json`.
@@ -309,7 +309,7 @@ Also exported: `formatDate`, `formatDateAxis`, `dollarsToCents`, `getTrendDirect
 ### Building from Source
 
 ```bash
-git clone https://github.com/Liiift-Studio/sanity-sales-portal.git
+git clone https://github.com/over-punch/sanity-sales-portal.git
 cd sanity-sales-portal
 npm install
 npm run build
@@ -394,7 +394,7 @@ The current release renders summary cards and top-performer panels. Not yet impl
 
 ## Support
 
-For support, please open an issue on the [GitHub repository](https://github.com/Liiift-Studio/sanity-sales-portal) or contact [support@liiift.studio](mailto:support@liiift.studio).
+For support, please open an issue on the [GitHub repository](https://github.com/over-punch/sanity-sales-portal) or contact [support@liiift.studio](mailto:support@liiift.studio).
 
 ---
 
