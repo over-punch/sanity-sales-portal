@@ -24,7 +24,7 @@
    "license": "MIT",
    "repository": {
       "type": "git",
-      "url": "https://github.com/Liiift-Studio/sanity-sales-portal.git"
+      "url": "https://github.com/over-punch/sanity-sales-portal.git"
    },
    "devDependencies": {
       "@sanity/ui": "^4.0.5",
