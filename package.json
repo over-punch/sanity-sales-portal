@@ -44,7 +44,7 @@
       "styled-components": "^6.0.0"
    },
    "dependencies": {
-      "@liiift-studio/sanity-ui-compat": "^0.1.0",
+      "@overpunch/sanity-ui-compat": "^0.1.0",
       "date-fns": "^2.30.0"
    }
 }

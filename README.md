@@ -65,7 +65,7 @@ flowchart TD
 
 ## Installation
 
-This package is **internal and unpublished** — there is no registry entry, and the name is unscoped, so it is not hiding under `@liiift-studio/` either. Consume it from source.
+This package is **internal and unpublished** — there is no registry entry, and the name is unscoped, so it is not hiding under `@overpunch/` either. Consume it from source.
 
 > [!IMPORTANT]
 > `package.json` declares `"prepare": "rollup -c"`, so npm will try to build on install — **and that build currently fails** ([details](#known-issue-the-build-is-broken)). Until it is fixed, installing this package will error at the prepare step and no `dist/` will be produced. Fix the Rollup config first, or consume `src/` directly through your Studio's own bundler.
@@ -184,11 +184,11 @@ One build spans four consecutive Studio majors, which is why the ranges look odd
 
 The trap: **both packages still *declare* the removed names in their `.d.ts`, typed `never`.** A named import type-checks, compiles green, and only then fails at runtime as an undefined component. TypeScript cannot see it, so a green build proves nothing about whether the dashboard renders.
 
-This plugin therefore imports **no `@sanity/ui` or `@sanity/icons` symbol directly**. Every primitive routes through [`@liiift-studio/sanity-ui-compat`](https://www.npmjs.com/package/@liiift-studio/sanity-ui-compat), a direct dependency that resolves whichever namespace is actually installed at runtime:
+This plugin therefore imports **no `@sanity/ui` or `@sanity/icons` symbol directly**. Every primitive routes through [`@overpunch/sanity-ui-compat`](https://www.npmjs.com/package/@overpunch/sanity-ui-compat), a direct dependency that resolves whichever namespace is actually installed at runtime:
 
 ```ts
 // src/components/SummaryCards.tsx
-import { Card, Grid, Heading, Text, Box, Flex, Badge, Stack } from '@liiift-studio/sanity-ui-compat';
+import { Card, Grid, Heading, Text, Box, Flex, Badge, Stack } from '@overpunch/sanity-ui-compat';
 ```
 
 Since Studio v6 ships `@sanity/ui` v4, the `>=2 <5` upper bound is correct rather than a stale ceiling.
