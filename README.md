@@ -394,8 +394,8 @@ The current release renders summary cards and top-performer panels. Not yet impl
 
 ## Support
 
-For support, please open an issue on the [GitHub repository](https://github.com/over-punch/sanity-sales-portal) or contact [support@liiift.studio](mailto:support@liiift.studio).
+For support, please open an issue on the [GitHub repository](https://github.com/over-punch/sanity-sales-portal) or contact [support@overpunch.ca](mailto:support@overpunch.ca).
 
 ---
 
-**Built with ❤️ by [Liiift Studio](https://liiift.studio)**
+**Built with ❤️ by [Liiift Studio](https://overpunch.ca)**
